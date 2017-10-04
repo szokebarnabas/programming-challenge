@@ -67,6 +67,8 @@ An **Anomaly Detector** is a web service which accepts POST requests to `/api/ev
 	  "required" : [ "eventId", "sensorId", "timestamp", "value", "status", "cause", "message" ]
 	}
 
+Here is an example response:
+
     {
         "eventId" : "cj86g5ypk000004zvevipqxfn",
         "sensorId" : "fd0a635d-2aaf-4460-a817-6353e1b6c050",
