@@ -5,7 +5,7 @@ lazy val root = (project in file(".")).
     name := "anomalydetector",
     version := "1.0",
     organization := "co.uk.bs",
-    scalaVersion := "2.12.1",
+    scalaVersion := "2.12.4",
     mainClass in Compile := Some("co.uk.bs.anomalydetector.Application")
   )
 

@@ -1,4 +1,4 @@
-package co.uk.bs.anomalydetector
+package co.uk.bs.anomalydetector.util
 
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
@@ -9,12 +9,12 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
 trait Sys {
-  implicit val actorSystem = ActorSystem("anomaly-detector")
-  implicit val executor: ExecutionContext = actorSystem.dispatcher
+  implicit val system = ActorSystem("anomaly-detector")
+  implicit val executor: ExecutionContext = system.dispatcher
   implicit val materializer = ActorMaterializer()
-  implicit val executionContext = actorSystem.dispatcher
+  implicit val executionContext = system.dispatcher
   implicit val timeout = Timeout(10 seconds)
 
-  def createLogger: LoggingAdapter = Logging.getLogger(actorSystem, this)
+  def createLogger: LoggingAdapter = Logging.getLogger(system, this)
 
 }
