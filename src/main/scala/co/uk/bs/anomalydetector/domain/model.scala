@@ -13,4 +13,7 @@ package object model {
   final case object MovingWindow extends DetectionModelType
 
   case class Event(eventId: String, sensorId: String, timestamp: Int, value: Double, modelType: DetectionModelType)
+
+  case class SensorAssignment(sensorId: String, model: String, threshold: Double, modelParams: Option[Map[String, String]])
+  case class ModelConfig(modelMapping: Seq[SensorAssignment])
 }

@@ -1,0 +1,28 @@
+{
+  "modelMapping": [
+    {
+      "sensorId": "1354978e-711f-4f26-bd96-6a6735064076",
+      "model": "ModelA",
+      "threshold": 27.0
+    },
+    {
+      "sensorId": "51971af0-8d3d-43b9-b453-bece5ed6eb04",
+      "model": "ModelB",
+      "threshold": 43.0
+    },
+    {
+      "sensorId": "863beb58-d820-4512-888e-6383bbe1ef77",
+      "model": "ModelB",
+      "threshold": 33.0
+    },
+    {
+      "sensorId": "863beb58-d820-4512-888e-6383bbe1ef77",
+      "model": "ModelC",
+      "threshold": 33.0,
+      "modelParams": {
+        "windowSize": "5",
+        "foo": "bar"
+      }
+    }
+  ]
+}
