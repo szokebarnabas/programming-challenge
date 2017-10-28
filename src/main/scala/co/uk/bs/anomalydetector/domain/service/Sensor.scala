@@ -20,7 +20,7 @@ class Sensor extends Actor with ActorLogging {
   private def updated(eventStore: EventStore): Receive = {
     case UpdateState(newEvent: Event) =>
 
-      sender() ! DetectionResultDto(
+      val result = DetectionResultDto(
         eventId = newEvent.eventId,
         sensorId = newEvent.sensorId,
         timestamp = System.currentTimeMillis(),
@@ -29,6 +29,10 @@ class Sensor extends Actor with ActorLogging {
         cause = "",
         message = ""
       )
+
+      log.info(s"Detection result of sensor ${newEvent.sensorId}: $result")
+
+      sender() ! result
   }
 
 }
