@@ -20,7 +20,8 @@ libraryDependencies ++= Seq(
   "org.json4s" % "json4s-ext_2.12" % "3.5.0",
   "com.typesafe" % "config" % "1.3.1",
   "com.typesafe.akka" % "akka-http-testkit_2.12" % "10.0.5" % "test",
-  "org.scalatest" % "scalatest_2.12" % "3.0.4" % "test"
+  "org.scalatest" % "scalatest_2.12" % "3.0.4" % "test",
+  "org.mockito" % "mockito-all" % "1.10.19" % "test"
 )
 
 assemblyJarName in assembly := s"${name.value}.jar"

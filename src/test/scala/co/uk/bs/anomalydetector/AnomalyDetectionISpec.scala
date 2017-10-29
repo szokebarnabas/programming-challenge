@@ -19,15 +19,15 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
 
       val expectedResponse = DetectionResultDto(
         eventId = "event1",
-        sensorId = "sensor1",
+        sensorId = "1354978e-711f-4f26-bd96-6a6735064076",
         timestamp = 1506723249,
-        value = 20.0,
-        status = "NO_MODEL",
+        value = 90.0,
+        status = "ANOMALY",
         cause = "",
         message = "")
 
       Given("A senor event is sent")
-      val request = createRequest("event1", "sensor1", 20.0)
+      val request = createRequest("event1", "1354978e-711f-4f26-bd96-6a6735064076", 90.0)
 
       Then("The correct response is created")
       postEvent(request, expectedResponse)

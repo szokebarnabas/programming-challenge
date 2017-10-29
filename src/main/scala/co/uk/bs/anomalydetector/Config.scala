@@ -9,5 +9,6 @@ trait Config {
   private val httpConfig = conf.getConfig("http")
   val httpHost = httpConfig.getString("host")
   val httpPort = httpConfig.getInt("port")
-  
+
+  val modelConfigPath = conf.getString("model-config-path")
 }
