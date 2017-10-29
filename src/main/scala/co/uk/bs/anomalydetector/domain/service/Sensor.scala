@@ -19,7 +19,11 @@ class Sensor extends Actor with ActorLogging {
       val result = ModelConfigStore.modelConfig.modelMapping.find(sa => sa.sensorId == newEvent.sensorId) match {
         case Some(config) =>
           Try {
-            new UpperBoundStrategy().evaluate(updatedStore, config.threshold)
+            config.model match {
+              case "UpperBoundThresholdAnomalyDetector" => new UpperBoundStrategy().evaluate(updatedStore, config.threshold)
+              case invalid => throw new IllegalStateException(s"Invalid model: $invalid")
+            }
+
           } match {
             case Success(detectionResult) => createResult(event = newEvent, detectionResult)
             case Failure(t) =>
