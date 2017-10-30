@@ -2,7 +2,8 @@ package co.uk.bs.anomalydetector
 
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import co.uk.bs.anomalydetector.infastructure.port.http.{EventRoute, MessageRouterFactorySlice}
+import co.uk.bs.anomalydetector.domain.service.MessageRouterFactorySlice
+import co.uk.bs.anomalydetector.infastructure.port.http.EventRoute
 import co.uk.bs.anomalydetector.util.{JsonSupport, Sys}
 import co.uk.bs.dto.{DetectionResultDto, EventDto}
 import org.json4s.jackson.Serialization.write
@@ -23,8 +24,8 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
         timestamp = 1506723249,
         value = 90.0,
         status = "ANOMALY",
-        cause = "",
-        message = "")
+        cause = "Upper Bound Threshold Detector",
+        message = "Exceeds threshold")
 
       Given("An event request with value above the threshold")
       val request = createRequest("event1", "1354978e-711f-4f26-bd96-6a6735064076", 90.0)
@@ -41,7 +42,7 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
         timestamp = 1506723249,
         value = 27.0,
         status = "NO_ANOMALY",
-        cause = "",
+        cause = "Upper Bound Threshold Detector",
         message = "")
 
       Given("An event request with value above the threshold")
@@ -98,7 +99,7 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
         timestamp = 1506723249,
         value = 33.0,
         status = "NO_ANOMALY",
-        cause = "",
+        cause = "Moving Windows Average Threshold Detector",
         message = "")
 
       Given("I post 6 events")
@@ -120,8 +121,8 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
         timestamp = 1506723249,
         value = 200.0,
         status = "ANOMALY",
-        cause = "",
-        message = "")
+        cause = "Moving Windows Average Threshold Detector",
+        message = "Exceeds threshold")
 
       Given("I post 6 events")
       postEvent(createRequest("event1", "863beb58-d820-4512-888e-6383bbe1ef77", 10.0))
@@ -141,7 +142,7 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
         timestamp = 1506723249,
         value = 20.0,
         status = "NO_ANOMALY",
-        cause = "",
+        cause = "Moving Windows Average Threshold Detector",
         message = "")
 
       val sensor2expectedResponse = DetectionResultDto(
@@ -150,8 +151,8 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
         timestamp = 1506723249,
         value = 90,
         status = "ANOMALY",
-        cause = "",
-        message = "")
+        cause = "Moving Windows Average Threshold Detector",
+        message = "Exceeds threshold")
 
       postEvent(createRequest("event1", "b46dfc91-7a62-4fcc-966a-862dcb053af3", 10.0))
       postEvent(createRequest("event2", "32db86fa-e853-4080-94d4-d6125ee028b3", 80.0))

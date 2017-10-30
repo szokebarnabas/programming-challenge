@@ -21,7 +21,7 @@ class Sensor extends Actor with ActorLogging {
           Try {
             executeDetection(updatedStore, config)
           } match {
-            case Success(detectionResult) => createResult(event = newEvent, detectionResult)
+            case Success(detectionResult) => detectionResult
             case Failure(t) =>
               log.error(t, "Failed to evaluate sensor data.")
               createResult(
@@ -46,11 +46,18 @@ class Sensor extends Actor with ActorLogging {
   }
 
   private def executeDetection(updatedStore: EventStore, config: SensorAssignment) = {
+
+    def createMsg(result: DetectionResult) = if (result == ANOMALY) "Exceeds threshold" else ""
+
     config.model match {
-      case "UpperBoundThresholdAnomalyDetector" => new UpperBoundStrategy().evaluate(updatedStore, config.threshold)
+      case "UpperBoundThresholdAnomalyDetector" =>
+        val result = new UpperBoundStrategy().evaluate(updatedStore, config.threshold)
+        createResult(updatedStore.events.last, result, "Upper Bound Threshold Detector", createMsg(result))
       case "MovingWindowThresholdAnomalyDetector" =>
         config.modelParams.flatMap(_.get("windowSize")) match {
-          case Some(windowSize) => new MovingWindowStrategy(windowSize.toInt).evaluate(updatedStore, config.threshold)
+          case Some(windowSize) =>
+            val result = new MovingWindowStrategy(windowSize.toInt).evaluate(updatedStore, config.threshold)
+            createResult(updatedStore.events.last, result, "Moving Windows Average Threshold Detector", createMsg(result))
           case None => throw new IllegalStateException("Window size property is not found.")
         }
 

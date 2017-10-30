@@ -1,7 +1,6 @@
-package co.uk.bs.anomalydetector.infastructure.port.http
+package co.uk.bs.anomalydetector.domain.service
 
 import akka.actor.{ActorRef, Props}
-import co.uk.bs.anomalydetector.domain.service.RouterActor
 import co.uk.bs.anomalydetector.util.Sys
 
 trait MessageRouterFactory {

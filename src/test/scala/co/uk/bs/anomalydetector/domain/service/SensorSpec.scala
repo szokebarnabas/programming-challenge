@@ -27,7 +27,7 @@ class SensorSpec extends BaseTest with Sys {
         'sensorId ("1354978e-711f-4f26-bd96-6a6735064076"),
         'value (15.0),
         'status ("NO_ANOMALY"),
-        'cause (""),
+        'cause ("Upper Bound Threshold Detector"),
         'message ("")
       )
     }
@@ -45,8 +45,8 @@ class SensorSpec extends BaseTest with Sys {
         'sensorId ("1354978e-711f-4f26-bd96-6a6735064076"),
         'value (90.0),
         'status ("ANOMALY"),
-        'cause (""),
-        'message ("")
+        'cause ("Upper Bound Threshold Detector"),
+        'message ("Exceeds threshold")
       )
     }
 

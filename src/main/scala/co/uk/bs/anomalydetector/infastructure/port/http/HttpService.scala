@@ -3,6 +3,7 @@ package co.uk.bs.anomalydetector.infastructure.port.http
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import co.uk.bs.anomalydetector.Config
+import co.uk.bs.anomalydetector.domain.service.MessageRouterFactorySlice
 import co.uk.bs.anomalydetector.util.Sys
 
 trait HttpService {

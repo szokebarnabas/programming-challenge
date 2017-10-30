@@ -20,7 +20,5 @@ trait HttpResponseHelper extends JsonSupport {
 
   def internalServerError(message: String): StandardRoute = internalServerError(ApiErrorDto(msg = message))
 
-  def notFound[T <: AnyRef](response: T) = completeWithStatus(NotFound, response)
-
   def ok[T <: AnyRef](response: T) = completeWithStatus(OK, response)
 }

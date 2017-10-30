@@ -3,6 +3,7 @@ package co.uk.bs.anomalydetector.infastructure.port.http
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.testkit.TestProbe
 import co.uk.bs.anomalydetector.RouteTestBase
+import co.uk.bs.anomalydetector.domain.service.MessageRouterFactorySlice
 import co.uk.bs.anomalydetector.util.Sys
 import co.uk.bs.dto.{DetectionResultDto, EventDto}
 import org.scalatest.concurrent.Eventually
