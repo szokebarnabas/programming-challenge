@@ -22,8 +22,9 @@ class UpperBoundStrategy extends DetectionStrategy {
 }
 
 class MovingWindowStrategy(windowSize: Int) extends DetectionStrategy {
-  override def evaluate(state: EventStore, threshold: Double): DetectionResult = {
-    val mostRecentN = state.events.map(_.value).takeRight(windowSize)
+  override def evaluate(eventStore: EventStore, threshold: Double): DetectionResult = {
+    validateInput(eventStore, threshold)
+    val mostRecentN = eventStore.events.map(_.value).takeRight(windowSize)
     mostRecentN.sum / mostRecentN.size match {
       case avg if avg > threshold => ANOMALY
       case _ => NO_ANOMALY
