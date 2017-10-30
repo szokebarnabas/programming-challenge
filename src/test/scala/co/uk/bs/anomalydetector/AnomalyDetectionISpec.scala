@@ -13,7 +13,7 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
 
   private val eventRoute = new EventRoute with MessageRouterFactorySlice with Sys
 
-  feature("Upper Bound Threshold Anomaly Detector") {
+  feature("Upper bound threshold anomaly detector") {
 
     scenario("ANOMALY gets returned")  {
 
@@ -88,6 +88,77 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
     }
   }
 
+  feature("Moving window avg threshold anomaly detector") {
+
+    scenario("NO_ANOMALY gets returned with window size 5")  {
+
+      val expectedResponse = DetectionResultDto(
+        eventId = "event6",
+        sensorId = "863beb58-d820-4512-888e-6383bbe1ef77",
+        timestamp = 1506723249,
+        value = 33.0,
+        status = "NO_ANOMALY",
+        cause = "",
+        message = "")
+
+      Given("I post 6 events")
+      postEvent(createRequest("event1", "863beb58-d820-4512-888e-6383bbe1ef77", 999.0))
+      postEvent(createRequest("event2", "863beb58-d820-4512-888e-6383bbe1ef77", 33.0))
+      postEvent(createRequest("event3", "863beb58-d820-4512-888e-6383bbe1ef77", 33.0))
+      postEvent(createRequest("event4", "863beb58-d820-4512-888e-6383bbe1ef77", 33.0))
+      postEvent(createRequest("event5", "863beb58-d820-4512-888e-6383bbe1ef77", 33.0))
+
+      Then("The status of the least response is NO_ANOMALY")
+      postEvent(createRequest("event6", "863beb58-d820-4512-888e-6383bbe1ef77", 33.0), expectedResponse)
+    }
+
+    scenario("ANOMALY gets returned with window size 5")  {
+
+      val expectedResponse = DetectionResultDto(
+        eventId = "event6",
+        sensorId = "863beb58-d820-4512-888e-6383bbe1ef77",
+        timestamp = 1506723249,
+        value = 200.0,
+        status = "ANOMALY",
+        cause = "",
+        message = "")
+
+      Given("I post 6 events")
+      postEvent(createRequest("event1", "863beb58-d820-4512-888e-6383bbe1ef77", 10.0))
+      postEvent(createRequest("event2", "863beb58-d820-4512-888e-6383bbe1ef77", 10.0))
+      postEvent(createRequest("event3", "863beb58-d820-4512-888e-6383bbe1ef77", 10.0))
+      postEvent(createRequest("event4", "863beb58-d820-4512-888e-6383bbe1ef77", 10.0))
+      postEvent(createRequest("event5", "863beb58-d820-4512-888e-6383bbe1ef77", 90.0))
+
+      Then("The status of the least response is ANOMALY")
+      postEvent(createRequest("event6", "863beb58-d820-4512-888e-6383bbe1ef77", 200.0), expectedResponse)
+    }
+
+    scenario("Different sensor states are stored in different actors")  {
+      val sensor1expectedResponse = DetectionResultDto(
+        eventId = "event3",
+        sensorId = "b46dfc91-7a62-4fcc-966a-862dcb053af3",
+        timestamp = 1506723249,
+        value = 20.0,
+        status = "NO_ANOMALY",
+        cause = "",
+        message = "")
+
+      val sensor2expectedResponse = DetectionResultDto(
+        eventId = "event4",
+        sensorId = "32db86fa-e853-4080-94d4-d6125ee028b3",
+        timestamp = 1506723249,
+        value = 90,
+        status = "ANOMALY",
+        cause = "",
+        message = "")
+
+      postEvent(createRequest("event1", "b46dfc91-7a62-4fcc-966a-862dcb053af3", 10.0))
+      postEvent(createRequest("event2", "32db86fa-e853-4080-94d4-d6125ee028b3", 80.0))
+      postEvent(createRequest("event3", "b46dfc91-7a62-4fcc-966a-862dcb053af3", 20.0), sensor1expectedResponse)
+      postEvent(createRequest("event4", "32db86fa-e853-4080-94d4-d6125ee028b3", 90.0), sensor2expectedResponse)
+    }
+  }
   private def createRequest(eventId: String, sensorId: String, value: Double): EventDto = {
     EventDto(eventId = eventId, sensorId = sensorId, timestamp = 1506723249, value = value)
   }
@@ -106,6 +177,15 @@ class AnomalyDetectionISpec extends FeatureSpec with GivenWhenThen with Matchers
           'cause (expected.cause),
           'message (expected.message),
         )
+      }
+    }
+  }
+
+  private def postEvent(request: EventDto) = {
+    Post("/event", HttpEntity(ContentTypes.`application/json`, write(request))) ~> eventRoute.eventRoute ~> check {
+      eventually {
+        status shouldEqual StatusCodes.OK
+        contentType should be(ContentTypes.`application/json`)
       }
     }
   }

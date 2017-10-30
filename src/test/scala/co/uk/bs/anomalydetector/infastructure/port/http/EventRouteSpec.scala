@@ -1,6 +1,5 @@
 package co.uk.bs.anomalydetector.infastructure.port.http
 
-import akka.actor.ActorRef
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.testkit.TestProbe
 import co.uk.bs.anomalydetector.RouteTestBase
@@ -10,12 +9,13 @@ import org.scalatest.concurrent.Eventually
 
 class EventRouteSpec extends RouteTestBase with Eventually {
 
-  val actorProbe = TestProbe()
-  private val eventRoute = new EventRoute with MessageRouterFactorySlice with Sys {
-    override val messageRouterFactory = new MessageRouterFactory {
-      override def createActor: ActorRef = actorProbe.ref
-    }
+  private val actorProbe = TestProbe()
+
+  trait FakeSys extends Sys {
+    override val routerActor = actorProbe.ref
   }
+
+  private val eventRoute = new EventRoute with MessageRouterFactorySlice with Sys with FakeSys
 
   "Event api" should {
     "delegate to the service layer and return the response" in {

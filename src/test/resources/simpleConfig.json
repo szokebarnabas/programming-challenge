@@ -20,6 +20,24 @@
       }
     },
     {
+      "sensorId": "32db86fa-e853-4080-94d4-d6125ee028b3",
+      "model": "MovingWindowThresholdAnomalyDetector",
+      "threshold": 33.0,
+      "modelParams": {
+        "windowSize": "5",
+        "foo": "bar"
+      }
+    },
+    {
+      "sensorId": "b46dfc91-7a62-4fcc-966a-862dcb053af3",
+      "model": "MovingWindowThresholdAnomalyDetector",
+      "threshold": 33.0,
+      "modelParams": {
+        "windowSize": "5",
+        "foo": "bar"
+      }
+    },
+    {
       "sensorId": "946b5321-43bf-4873-ae7a-39c54ef69692",
       "model": "UpperBoundThresholdAnomalyDetector",
       "threshold": -33.0,

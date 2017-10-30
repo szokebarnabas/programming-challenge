@@ -28,7 +28,27 @@ object TestFixtures {
     ))
   )
 
-  val fourthSensorAssignment = SensorAssignment(
+  val fourthSensorAssignment1 = SensorAssignment(
+    sensorId = "32db86fa-e853-4080-94d4-d6125ee028b3",
+    model = "MovingWindowThresholdAnomalyDetector",
+    threshold = 33.0,
+    modelParams = Some(Map(
+      "windowSize" -> "5",
+      "foo" -> "bar",
+    ))
+  )
+
+  val fifthSensorAssignment2 = SensorAssignment(
+    sensorId = "b46dfc91-7a62-4fcc-966a-862dcb053af3",
+    model = "MovingWindowThresholdAnomalyDetector",
+    threshold = 33.0,
+    modelParams = Some(Map(
+      "windowSize" -> "5",
+      "foo" -> "bar",
+    ))
+  )
+
+  val sixthSensorAssignment = SensorAssignment(
     sensorId = "946b5321-43bf-4873-ae7a-39c54ef69692",
     model = "UpperBoundThresholdAnomalyDetector",
     threshold = -33.0,
@@ -38,11 +58,14 @@ object TestFixtures {
     ))
   )
 
+
   val expectedConfig = ModelConfig(
     Seq(
       firstSensorAssignment,
       secondSensorAssignment,
       thirdSensorAssignment,
-      fourthSensorAssignment,
+      fourthSensorAssignment1,
+      fifthSensorAssignment2,
+      sixthSensorAssignment,
     ))
 }

@@ -19,8 +19,7 @@ trait EventRoute extends JsonSupport with HttpResponseHelper {
       pathEndOrSingleSlash {
         post {
           entity(as[EventDto]) { dto =>
-            val messageRouter = messageRouterFactory.createActor
-            onSuccess((messageRouter ? dto).mapTo[DetectionResultDto]) { detectionResultDto =>
+            onSuccess((routerActor ? dto).mapTo[DetectionResultDto]) { detectionResultDto =>
               complete(detectionResultDto)
             }
           }

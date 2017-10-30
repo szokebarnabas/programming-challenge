@@ -19,11 +19,7 @@ class Sensor extends Actor with ActorLogging {
       val result = ModelConfigStore.modelConfig.modelMapping.find(sa => sa.sensorId == newEvent.sensorId) match {
         case Some(config) =>
           Try {
-            config.model match {
-              case "UpperBoundThresholdAnomalyDetector" => new UpperBoundStrategy().evaluate(updatedStore, config.threshold)
-              case invalid => throw new IllegalStateException(s"Invalid model: $invalid")
-            }
-
+            executeDetection(updatedStore, config)
           } match {
             case Success(detectionResult) => createResult(event = newEvent, detectionResult)
             case Failure(t) =>
@@ -47,6 +43,19 @@ class Sensor extends Actor with ActorLogging {
 
       sender() ! result
       context.become(updated(updatedStore))
+  }
+
+  private def executeDetection(updatedStore: EventStore, config: SensorAssignment) = {
+    config.model match {
+      case "UpperBoundThresholdAnomalyDetector" => new UpperBoundStrategy().evaluate(updatedStore, config.threshold)
+      case "MovingWindowThresholdAnomalyDetector" =>
+        config.modelParams.flatMap(_.get("windowSize")) match {
+          case Some(windowSize) => new MovingWindowStrategy(windowSize.toInt).evaluate(updatedStore, config.threshold)
+          case None => throw new IllegalStateException("Window size property is not found.")
+        }
+
+      case invalid => throw new IllegalStateException(s"Invalid model: $invalid")
+    }
   }
 
   def createResult(event: Event,
