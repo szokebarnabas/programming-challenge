@@ -1,6 +1,6 @@
 # anomaly detector
 
-##How to run it:
+## How to run it:
 
 1) Build a fat jar
 ```
@@ -17,7 +17,7 @@ export MODEL_CONFIG_PATH=simpleConfig.json
 java -jar anomalydetector.jar
 ```
 
-###Configuration file format
+### Configuration file format
 
 ```
 {
@@ -52,7 +52,7 @@ java -jar anomalydetector.jar
     }
 }
 ```
-###Example
+### Example
 
 ```
 Post localhost:9000/api/event
